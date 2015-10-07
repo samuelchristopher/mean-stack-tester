@@ -1,11 +1,12 @@
 var User        = require('../models/user');
+var Story        = require('../models/story');
 var config      = require('../../config');
 var secretKey   = config.secretKey;
 var jwt         = require('jsonwebtoken');
 
 function createToken(user) {
   var token = jwt.sign({
-    _id: user.id,
+    id: user._id,
     name: user.name,
     username: user.username
   }, secretKey, {
@@ -87,9 +88,33 @@ module.exports = function(app, express) {
       res.status(403).send({ success: false, message: "No token provided" });
     }
   });
-  api.get('/', function(req, res) {
-    res.json("Hello World!");
-  });
+
+  api.route('/')
+     .post(function(req, res) {
+       var story = new Story({
+         creator: req.decoded.id,
+         content: req.body.content
+       });
+
+       story.save(function(err) {
+         if(err) {
+           res.send(err);
+           return
+         }
+
+         res.json({ message: "New story created!" });
+       });
+     })
+     .get(function(req, res) {
+       Story.find({ creator: req.decoded.id }, function(err, stories) {
+         if(err) {
+           res.send(err);
+           return;
+         }
+
+         res.json(stories);
+       });
+     })
 
   return api;
 
