@@ -1,0 +1,24 @@
+{
+  "name": "mean-stack-tester",
+  "version": "1.0.0",
+  "description": "This an app that I made when learning the MEAN Stack.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samuelchristopher/mean-stack-tester.git"
+  },
+  "author": "Samuel Christopher <thesamchris@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samuelchristopher/mean-stack-tester/issues"
+  },
+  "homepage": "https://github.com/samuelchristopher/mean-stack-tester#readme",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "morgan": "^1.6.1"
+  }
+}
