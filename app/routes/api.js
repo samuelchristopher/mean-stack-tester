@@ -19,8 +19,18 @@ module.exports = function(app, express) {
       }
 
       res.json({ message: "User has been created!" });
-    })
+    });
+  });
 
+  api.get('/users', function(req, res) {
+    User.find({}, function(err, users) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+
+      res.json(users);
+    });
   });
 
   return api;
