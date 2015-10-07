@@ -54,7 +54,7 @@ module.exports = function(app, express) {
       if (!user) {
         res.send({ message: "User doesn't exist" });
       } else if (user) {
-        var validPassword = user.checkPassword(req.body.password);
+        var validPassword = user.comparePassword(req.body.password);
 
         if (!validPassword) {
           res.send({ message: "Invalid password" })
@@ -69,6 +69,26 @@ module.exports = function(app, express) {
         }
       }
     });
+  });
+
+  api.use(function(req, res, next) {
+    console.log("Somebody just came to our app");
+    var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+    if (token) {
+      jwt.verify(token, secretKey, function(err, decoded) {
+        if (err) {
+          res.status(403).send({  success: false, message: "Failed to autheticate user" });
+        } else {
+          req.decoded = decoded;
+          next();
+        }
+      });
+    } else {
+      res.status(403).send({ success: false, message: "No token provided" });
+    }
+  });
+  api.get('/', function(req, res) {
+    res.json("Hello World!");
   });
 
   return api;
